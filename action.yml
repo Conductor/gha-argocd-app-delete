@@ -14,6 +14,10 @@ inputs:
     required: true
     description: 'ArgoCD server'
     default: argocd.dev.us-east-1.cond
+  appNamespace:
+    required: true
+    description: 'Application namespace'
+    default: argocd
 
 runs:
   using: "composite"
