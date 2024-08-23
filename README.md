@@ -1,0 +1,1 @@
+# gha-argocd-app-delete
