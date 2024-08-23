@@ -1,0 +1,32 @@
+name: 'Create ArgoCD application'
+description: 'Create ArgoCD Application using cli'
+inputs:
+  name:
+    required: true
+    description: 'Application name'
+
+runs:
+  using: "composite"
+  steps:
+  - name: Install ArgoCD cli
+    shell: bash
+    run: |
+      if [ -z $(which argocd || true) ]; then
+        mkdir -p /home/runner/.local/bin/
+        curl -o /home/runner/.local/bin/argocd https://artifactory.infra.us-east-1.conductor.sh/artifactory/thirdparty/argocd/v2.11.3/argocd-linux-amd64
+        chmod +x /home/runner/.local/bin/argocd
+      fi
+
+  - name: Delete Application
+    shell: bash
+    run: |
+      echo "Delete application:"
+
+      argocd app delete ${{ inputs.name }} \
+        --upsert \
+        --auth-token '${{ inputs.token }}' \
+        --server ${{ inputs.server }} \
+        --insecure \
+        --grpc-web \
+        --app-namespace ${{ inputs.appNamespace }} \
+        --dest-server https://kubernetes.default.svc
