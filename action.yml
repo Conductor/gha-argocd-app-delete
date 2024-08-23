@@ -4,6 +4,13 @@ inputs:
   name:
     required: true
     description: 'Application name'
+  token:
+    description: 'ArgoCD access token'
+    required: true
+  server:
+    required: true
+    description: 'ArgoCD server'
+    default: argocd.dev.us-east-1.cond
 
 runs:
   using: "composite"
@@ -28,5 +35,4 @@ runs:
         --server ${{ inputs.server }} \
         --insecure \
         --grpc-web \
-        --app-namespace ${{ inputs.appNamespace }} \
-        --dest-server https://kubernetes.default.svc
+        --app-namespace ${{ inputs.appNamespace }}
