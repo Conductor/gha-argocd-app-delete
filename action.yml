@@ -2,8 +2,11 @@ name: 'Create ArgoCD application'
 description: 'Create ArgoCD Application using cli'
 inputs:
   name:
-    required: true
+    required: false
     description: 'Application name'
+  selector:
+    required: false
+    description: 'Label selector'
   token:
     description: 'ArgoCD access token'
     required: true
@@ -26,10 +29,25 @@ runs:
 
   - name: Delete Application
     shell: bash
+    if: ${{ inputs.selector != '' }}
     run: |
       echo "Delete application:"
 
-      argocd app delete ${{ inputs.name }} \
+      argocd app delete -y -l ${{ inputs.selector }} \
+        --upsert \
+        --auth-token '${{ inputs.token }}' \
+        --server ${{ inputs.server }} \
+        --insecure \
+        --grpc-web \
+        --app-namespace ${{ inputs.appNamespace }}
+
+  - name: Delete Application
+    shell: bash
+    if: ${{ inputs.name != '' }}
+    run: |
+      echo "Delete application:"
+
+      argocd app delete -y ${{ inputs.name }} \
         --upsert \
         --auth-token '${{ inputs.token }}' \
         --server ${{ inputs.server }} \
