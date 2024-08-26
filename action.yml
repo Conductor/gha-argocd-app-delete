@@ -18,6 +18,10 @@ inputs:
     required: true
     description: 'Application namespace'
     default: argocd
+  params:
+    required: false
+    description: "Additional cli params"
+    default: ""
 
 runs:
   using: "composite"
@@ -37,7 +41,7 @@ runs:
     run: |
       echo "Delete application:"
 
-      argocd app delete -y -l ${{ inputs.selector }} \
+      argocd app delete -y -l ${{ inputs.selector }} ${{ inputs.params }} \
         --auth-token '${{ inputs.token }}' \
         --server ${{ inputs.server }} \
         --insecure \
@@ -50,7 +54,7 @@ runs:
     run: |
       echo "Delete application:"
 
-      argocd app delete -y ${{ inputs.name }} \
+      argocd app delete -y ${{ inputs.name }} ${{ inputs.params }} \
         --upsert \
         --auth-token '${{ inputs.token }}' \
         --server ${{ inputs.server }} \
