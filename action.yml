@@ -55,7 +55,6 @@ runs:
       echo "Delete application:"
 
       argocd app delete -y ${{ inputs.name }} ${{ inputs.params }} \
-        --upsert \
         --auth-token '${{ inputs.token }}' \
         --server ${{ inputs.server }} \
         --insecure \
